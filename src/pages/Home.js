@@ -12,12 +12,12 @@ const styles = {
   },
 };
 
-function Home() {
+const Home = () => {
   return (
     <div style={styles.wrapper}>
       <WeatherChart />
     </div>
   );
-}
+};
 
 export default Home;
