@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import config from "../Config.json";
 
+import IndividualDay from "./parts/IndividualDay";
+
 class WeatherChart extends Component {
   constructor(props) {
     super(props);
@@ -10,20 +12,37 @@ class WeatherChart extends Component {
       failedToLoad: true,
       loading: true,
     };
+
+    this.styles = {
+      container: {
+        width: "90vw",
+        minWidth: "300px",
+        maxWidth: "800px",
+        minHeight: "100px",
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "flex-start",
+      },
+    };
   }
 
   groupWeatherInformation = (wI) => {
-    const map = new Map();
+    const data = {};
     wI.forEach((info) => {
       const key = info.dt_txt.split(" ")[0];
-      const collection = map.get(key);
-      !collection ? map.set(key, [info]) : collection.push(info);
+      const exists = data.hasOwnProperty(key);
+      if (exists) {
+        data[key] = [...data[key], info];
+      } else {
+        data[key] = [info];
+      }
     });
-    return map;
+    return data;
   };
 
   loadWeatherInformation = () => {
-    const weatherForecastEndpoint = `https://api.openweathermap.org/data/2.5/forecast?q=London&appid=${config.API_TOKEN}`;
+    const weatherForecastEndpoint = `https://api.openweathermap.org/data/2.5/forecast?units=metric&q=London&appid=${config.API_TOKEN}`;
     fetch(weatherForecastEndpoint)
       .then((res) => res.json())
       .then((data) => this.groupWeatherInformation(Array.from(data.list)))
@@ -41,7 +60,21 @@ class WeatherChart extends Component {
   };
 
   render() {
-    return <div></div>;
+    const { weatherInformation } = { ...this.state };
+    return (
+      <div>
+        <h1>Upcoming Weather</h1>
+        <div style={this.styles.container}>
+          {Object.keys(weatherInformation).map((key) => (
+            <IndividualDay
+              key={key}
+              date={key}
+              information={weatherInformation[key]}
+            />
+          ))}
+        </div>
+      </div>
+    );
   }
 }
 

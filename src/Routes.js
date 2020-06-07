@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 
-import { default as Home } from "./weather-chart/WeatherChart";
+import { default as Home } from "./pages/Home";
 
 const Routes = () => {
   return (

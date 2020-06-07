@@ -1,4 +1,4 @@
-import react from "react";
+import React from "react";
 import WeatherChart from "../weather-chart/WeatherChart";
 
 const styles = {
