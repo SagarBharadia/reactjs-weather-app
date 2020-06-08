@@ -23,11 +23,25 @@ class IndividualDay extends Component {
     };
   }
 
+  averageTemperature = () => {
+    let total = 0;
+    this.information.forEach((slot) => {
+      const slotAverage = (slot.main.temp_max + slot.main.temp_min) / 2;
+      total += slotAverage;
+    });
+    return Math.round(total / this.information.length).toFixed(1);
+  };
+
   render() {
     const date = new Date(this.date);
+
     return (
       <div style={this.styles.container}>
         <DateHeader date={date} />
+        <p>
+          {this.averageTemperature()}
+          <sup>&#8451;</sup>
+        </p>
       </div>
     );
   }

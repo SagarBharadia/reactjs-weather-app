@@ -33,11 +33,11 @@ const getFullDay = (dayNumber) => {
 const getDateWithOrdinal = (date) => {
   return (
     date +
-    (31 == date || 21 == date || 1 == date
+    (31 === date || 21 === date || 1 === date
       ? "st"
-      : 22 == date || 2 == date
+      : 22 === date || 2 === date
       ? "nd"
-      : 23 == date || 3 == date
+      : 23 === date || 3 === date
       ? "rd"
       : "th")
   );
