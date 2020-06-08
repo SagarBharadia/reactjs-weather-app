@@ -24,6 +24,10 @@ class WeatherChart extends Component {
         justifyContent: "space-between",
         alignItems: "flex-start",
       },
+      poweredBy: {
+        fontWeight: "300",
+        fontSize: "1em",
+      },
     };
   }
 
@@ -64,6 +68,17 @@ class WeatherChart extends Component {
     return (
       <div>
         <h1>Upcoming Weather</h1>
+        <p style={this.styles.poweredBy}>
+          Powered by{" "}
+          <a
+            href="https://openweathermap.org/forecast5"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            OpenWeatherMap API
+          </a>
+          .
+        </p>
         <div style={this.styles.container}>
           {Object.keys(weatherInformation).map((key) => (
             <IndividualDay
