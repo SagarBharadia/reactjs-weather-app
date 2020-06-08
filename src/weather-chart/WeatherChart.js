@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import config from "../Config.json";
 
 import IndividualDay from "./parts/IndividualDay";
+import WeatherForm from "./parts/WeatherForm";
 
 class WeatherChart extends Component {
   constructor(props) {
@@ -26,41 +26,17 @@ class WeatherChart extends Component {
       },
       poweredBy: {
         fontWeight: "300",
-        fontSize: "1em",
+        fontSize: "0.7em",
       },
     };
   }
 
-  groupWeatherInformation = (wI) => {
-    const data = {};
-    wI.forEach((info) => {
-      const key = info.dt_txt.split(" ")[0];
-      const exists = data.hasOwnProperty(key);
-      if (exists) {
-        data[key] = [...data[key], info];
-      } else {
-        data[key] = [info];
-      }
+  setWeatherInformation = (data) => {
+    this.setState({
+      failedToLoad: data.failedToLoad,
+      loading: data.loading,
+      weatherInformation: data.weatherInformation,
     });
-    return data;
-  };
-
-  loadWeatherInformation = () => {
-    const weatherForecastEndpoint = `https://api.openweathermap.org/data/2.5/forecast?units=metric&q=London&appid=${config.API_TOKEN}`;
-    fetch(weatherForecastEndpoint)
-      .then((res) => res.json())
-      .then((data) => this.groupWeatherInformation(Array.from(data.list)))
-      .then((groupedWeatherInformation) =>
-        this.setState({
-          loading: false,
-          failedToLoad: false,
-          weatherInformation: groupedWeatherInformation,
-        })
-      );
-  };
-
-  componentDidMount = () => {
-    this.loadWeatherInformation();
   };
 
   render() {
@@ -68,6 +44,7 @@ class WeatherChart extends Component {
     return (
       <div>
         <h1>Upcoming Weather</h1>
+        <WeatherForm setWeatherInformation={this.setWeatherInformation} />
         <p style={this.styles.poweredBy}>
           Powered by{" "}
           <a
