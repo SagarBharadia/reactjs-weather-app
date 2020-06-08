@@ -5,9 +5,6 @@ class IndividualDay extends Component {
   constructor(props) {
     super(props);
 
-    this.date = props.date;
-    this.information = props.information;
-
     this.styles = {
       container: {
         display: "flex",
@@ -25,15 +22,15 @@ class IndividualDay extends Component {
 
   averageTemperature = () => {
     let total = 0;
-    this.information.forEach((slot) => {
+    this.props.information.forEach((slot) => {
       const slotAverage = (slot.main.temp_max + slot.main.temp_min) / 2;
       total += slotAverage;
     });
-    return Math.round(total / this.information.length).toFixed(1);
+    return Math.round(total / this.props.information.length).toFixed(1);
   };
 
   render() {
-    const date = new Date(this.date);
+    const date = new Date(this.props.date);
 
     return (
       <div style={this.styles.container}>
