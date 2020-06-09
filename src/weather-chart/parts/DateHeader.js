@@ -2,7 +2,6 @@ import React from "react";
 
 const getFullDay = (dayNumber) => {
   let fullDay = "";
-  console.log(dayNumber);
   switch (dayNumber) {
     case 1:
       fullDay = "Monday ";

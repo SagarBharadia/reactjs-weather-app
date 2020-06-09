@@ -10,6 +10,19 @@ class WeatherForm extends Component {
         display: "flex",
         flexDirection: "row",
       },
+      inputField: {
+        border: "none",
+        outlin: "none",
+        borderBottom: "solid 1px #000",
+        marginRight: "20px",
+      },
+      button: {
+        background: "#f7e298",
+        outline: "0",
+        border: "none",
+        padding: "5px 20px",
+        borderRadius: "5px",
+      },
     };
 
     this.state = {
@@ -71,8 +84,16 @@ class WeatherForm extends Component {
     const { city } = { ...this.state };
     return (
       <form onSubmit={this.onSubmit} style={this.styles.form}>
-        <input name="city" value={city} onChange={this.onChange} required />
-        <button type="submit">Search</button>
+        <input
+          name="city"
+          value={city}
+          onChange={this.onChange}
+          style={this.styles.inputField}
+          required
+        />
+        <button type="submit" style={this.styles.button}>
+          Go
+        </button>
       </form>
     );
   }

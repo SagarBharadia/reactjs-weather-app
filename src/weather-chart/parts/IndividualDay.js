@@ -70,14 +70,6 @@ class IndividualDay extends Component {
     return returnLoad;
   };
 
-  componentDidMount() {
-    const averages = this.averageTemperatures();
-    this.setState({
-      averageTemperature: averages.avgTemp,
-      averageFeelsLikeTemperature: averages.avgFeelsLikeTemp,
-    });
-  }
-
   toggleHover = () => {
     const newState = !this.state.hovered;
     this.setState({
@@ -87,9 +79,8 @@ class IndividualDay extends Component {
 
   render() {
     const date = new Date(this.props.date);
-    const { averageTemperature, averageFeelsLikeTemperature } = {
-      ...this.state,
-    };
+
+    const { avgTemp, avgFeelsLikeTemp } = { ...this.averageTemperatures() };
 
     this.state.hovered ? this.hoveredStyles() : this.unhoveredStyles();
 
@@ -101,13 +92,13 @@ class IndividualDay extends Component {
       >
         <DateHeader date={date} />
         <p style={this.styles.mainTemp}>
-          {averageTemperature}
+          {avgTemp}
           <sup>&#8451;</sup>
         </p>
         <p style={this.styles.feelsLikeTemp}>
           Feels like
           <br />
-          {averageFeelsLikeTemperature}
+          {avgFeelsLikeTemp}
           <sup>&#8451;</sup>
         </p>
       </div>
