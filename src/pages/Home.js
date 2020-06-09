@@ -7,8 +7,9 @@ const styles = {
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    width: "100vw",
-    height: "100vh",
+    width: "100%",
+    minHeight: "100vh",
+    padding: "10px",
   },
 };
 

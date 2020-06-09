@@ -16,13 +16,13 @@ class WeatherChart extends Component {
     this.styles = {
       container: {
         width: "90vw",
-        minWidth: "300px",
         maxWidth: "800px",
         minHeight: "100px",
         display: "flex",
         flexDirection: "row",
-        justifyContent: "space-between",
+        justifyContent: "space-evenly",
         alignItems: "flex-start",
+        flexWrap: "wrap",
       },
       poweredBy: {
         fontWeight: "300",
