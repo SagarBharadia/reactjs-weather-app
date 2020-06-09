@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import config from "../Config.json";
 
 import IndividualDay from "./parts/IndividualDay";
 import WeatherForm from "./parts/WeatherForm";
@@ -11,6 +12,7 @@ class WeatherChart extends Component {
       weatherInformation: [],
       failedToLoad: true,
       loading: true,
+      initialLocation: "London",
     };
 
     this.styles = {
@@ -31,20 +33,54 @@ class WeatherChart extends Component {
     };
   }
 
-  setWeatherInformation = (data) => {
-    this.setState({
-      failedToLoad: data.failedToLoad,
-      loading: data.loading,
-      weatherInformation: data.weatherInformation,
+  groupWeatherInformation = (wI) => {
+    const data = {};
+    wI.forEach((info) => {
+      const key = info.dt_txt.split(" ")[0];
+      const exists = data.hasOwnProperty(key);
+      if (exists) {
+        data[key] = [...data[key], info];
+      } else {
+        data[key] = [info];
+      }
     });
+    return data;
   };
 
+  loadWeatherInformation = (city) => {
+    const weatherForecastEndpoint = `https://api.openweathermap.org/data/2.5/forecast?units=metric&q=${city}&appid=${config.API_TOKEN}`;
+    fetch(weatherForecastEndpoint)
+      .then((res) => res.json())
+      .then((data) => this.groupWeatherInformation(Array.from(data.list)))
+      .then((groupedWeatherInformation) =>
+        this.setState({
+          loading: false,
+          failedToLoad: false,
+          weatherInformation: groupedWeatherInformation,
+        })
+      )
+      .catch((error) =>
+        this.setState({
+          loading: false,
+          failedToLoad: true,
+          weatherInformation: [],
+        })
+      );
+  };
+
+  componentDidMount() {
+    this.loadWeatherInformation(this.state.initialLocation);
+  }
+
   render() {
-    const { weatherInformation } = { ...this.state };
+    const { weatherInformation, initialLocation } = { ...this.state };
     return (
       <div>
         <h1>Upcoming Weather</h1>
-        <WeatherForm setWeatherInformation={this.setWeatherInformation} />
+        <WeatherForm
+          loadWeatherInformation={this.loadWeatherInformation}
+          initialLocation={initialLocation}
+        />
         <p style={this.styles.poweredBy}>
           Powered by{" "}
           <a

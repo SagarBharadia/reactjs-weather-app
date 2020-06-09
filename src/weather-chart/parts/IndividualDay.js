@@ -6,8 +6,6 @@ class IndividualDay extends Component {
     super(props);
 
     this.state = {
-      averageTemperature: 0,
-      averageFeelsLikeTemperature: 0,
       hovered: false,
     };
 
@@ -51,13 +49,23 @@ class IndividualDay extends Component {
     this.styles.container = this.initialStyles.container;
   };
 
-  averageTemperatures = () => {
+  averages = () => {
     let totalTemp = 0;
     let totalFeelsLikeTemp = 0;
-    this.props.information.forEach((slot) => {
+    let icon = null;
+    let iconAlt = "";
+    this.props.information.forEach((slot, index) => {
       const slotAverage = (slot.main.temp_max + slot.main.temp_min) / 2;
       totalTemp += slotAverage;
       totalFeelsLikeTemp += slot.main.feels_like;
+      const splitTime = slot.dt_txt.split(" ")[1];
+      if (splitTime === "12:00:00") {
+        icon = slot.weather[0].icon;
+        iconAlt = slot.weather[0].description;
+      } else if (index === 0 && icon === null) {
+        icon = slot.weather[0].icon;
+        iconAlt = slot.weather[0].description;
+      }
     });
 
     const returnLoad = {
@@ -66,6 +74,8 @@ class IndividualDay extends Component {
       avgFeelsLikeTemp:
         Math.round((totalFeelsLikeTemp / this.props.information.length) * 10) /
         10,
+      avgIcon: icon,
+      avgIconAlt: iconAlt,
     };
     return returnLoad;
   };
@@ -80,7 +90,9 @@ class IndividualDay extends Component {
   render() {
     const date = new Date(this.props.date);
 
-    const { avgTemp, avgFeelsLikeTemp } = { ...this.averageTemperatures() };
+    const { avgTemp, avgFeelsLikeTemp, avgIcon, avgIconAlt } = {
+      ...this.averages(),
+    };
 
     this.state.hovered ? this.hoveredStyles() : this.unhoveredStyles();
 
@@ -95,6 +107,10 @@ class IndividualDay extends Component {
           {avgTemp}
           <sup>&#8451;</sup>
         </p>
+        <img
+          src={`http://openweathermap.org/img/wn/${avgIcon}@2x.png`}
+          alt={avgIconAlt}
+        />
         <p style={this.styles.feelsLikeTemp}>
           Feels like
           <br />

@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import config from "../../Config.json";
 
 class WeatherForm extends Component {
   constructor(props) {
@@ -26,7 +25,7 @@ class WeatherForm extends Component {
     };
 
     this.state = {
-      city: "London",
+      city: this.props.initialLocation,
     };
   }
 
@@ -38,46 +37,7 @@ class WeatherForm extends Component {
 
   onSubmit = (e) => {
     e.preventDefault();
-    this.loadWeatherInformation();
-  };
-
-  groupWeatherInformation = (wI) => {
-    const data = {};
-    wI.forEach((info) => {
-      const key = info.dt_txt.split(" ")[0];
-      const exists = data.hasOwnProperty(key);
-      if (exists) {
-        data[key] = [...data[key], info];
-      } else {
-        data[key] = [info];
-      }
-    });
-    return data;
-  };
-
-  loadWeatherInformation = () => {
-    const weatherForecastEndpoint = `https://api.openweathermap.org/data/2.5/forecast?units=metric&q=${this.state.city}&appid=${config.API_TOKEN}`;
-    fetch(weatherForecastEndpoint)
-      .then((res) => res.json())
-      .then((data) => this.groupWeatherInformation(Array.from(data.list)))
-      .then((groupedWeatherInformation) =>
-        this.props.setWeatherInformation({
-          loading: false,
-          failedToLoad: false,
-          weatherInformation: groupedWeatherInformation,
-        })
-      )
-      .catch((error) =>
-        this.props.setWeatherInformation({
-          loading: false,
-          failedToLoad: true,
-          weatherInformation: [],
-        })
-      );
-  };
-
-  componentDidMount = () => {
-    this.loadWeatherInformation();
+    this.props.loadWeatherInformation(this.state.city);
   };
 
   render() {
